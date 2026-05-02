@@ -140,7 +140,7 @@ A Raspberry Pi 4B acts as the central controller, coordinating an EasyOCR-based 
 
 ## 7.2 Wiring Plan
 - **I2C LCD**: SDA to GPIO 2, SCL to GPIO 3. Powered by **5V rail**.
-- **Servo Motor**: PWM to GPIO 18 (via pigpio). Powered by **5V rail**.
+- **Servo Motor**: PWM to GPIO 18 (via RPi.GPIO). Powered by **5V rail**.
 - **IR Sensors**: Entrance (GPIO 17), Slots 1-4 (GPIO 27, 22, 5, 6). Powered EXCLUSIVELY by the **3.3V rail**.
 
 ## 7.3 Circuit Diagram/architecture diagram
@@ -163,7 +163,7 @@ A Raspberry Pi 4B acts as the central controller, coordinating an EasyOCR-based 
 | --- | --- |
 | Python 3.9+ | Main application logic and state machine |
 | OpenCV + EasyOCR | Image capture, pre-processing, and licence plate text extraction |
-| pigpio | Hardware PWM generation for jitter-free servo control |
+| RPi.GPIO | Software PWM generation for servo control |
 | RPLCD | Managing the I2C 16x2 LCD display |
 
 ## 8.2 Software Logic/Algorithm
@@ -338,6 +338,8 @@ Lighting conditions in the final display area might affect camera capture and OC
 
 # 16 Build Photos
 <img src="images/setup.jpg" width="600">
+<img src="images/connections.jpg" width="600">
+<img src="images/final_connection.jpg" width="600">
 
 ---
 
@@ -349,14 +351,14 @@ A fully automated, edge-AI powered Smart Parking System for a mall. The system i
 ## 17.2 What Works Well
 - The IR sensor debouncing is extremely robust.
 - The dynamic billing seamlessly handles crossing peak and off-peak boundaries.
-- The hardware PWM on the servo gate is smooth and jitter-free.
+- The servo gate actuates reliably to control vehicle entry.
 
 ## 17.3 What Still Needs Improvement
 - EasyOCR processing takes a few seconds on the Pi CPU, which causes a slight wait at the entrance.
 - Performance could be improved by using a Coral Edge TPU or lighter OCR model.
 
 ## 17.4 What Changed From the Original Plan
-We completely dropped HC-SR04 ultrasonic sensors in favor of IR proximity sensors. We also decided to keep all billing logic local instead of sending it to a cloud server to ensure zero latency and offline capability.
+We completely dropped HC-SR04 ultrasonic sensors in favor of IR proximity sensors. We also decided to keep all billing logic local instead of sending it to a cloud server to ensure zero latency and offline capability. Additionally, we switched from `pigpio` to `RPi.GPIO` for servo control because the `pigpiod` daemon was causing issues.
 
 ---
 
@@ -394,4 +396,6 @@ We would add a web dashboard to visually represent the `database.json` live stat
 - [x] Testing log is updated
 - [x] Playtesting notes are included
 - [x] Build photos are included
+- [x] Final reflection is written
+Build photos are included
 - [x] Final reflection is written
