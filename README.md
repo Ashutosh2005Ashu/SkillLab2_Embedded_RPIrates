@@ -12,10 +12,10 @@
 ## 1.2 Team Members
 | Name | Primary Role | Secondary Role | Strengths |
 | --- | --- | --- | --- |
-| Ashutosh Awasthi | | | |
-| Shams Kadri | | | |
-| Chirag Pedeamkar | | | |
-| Sanisa Patrikar | | | |
+| Ashutosh Awasthi |Github repo maintainer |Coding  |software and documentation |
+| Shams Kadri |Hardware design and integration |Ideation and Logic |Hardware and backend |
+| Chirag Pedeamkar |Research papers,documentaion |hardware integration | Presentation of project |
+| Sanisa Patrikar |Logic design and implementation |Team coordination |software and presentation |
 
 ## 1.3 Project Title
 `Smart Parking System`
