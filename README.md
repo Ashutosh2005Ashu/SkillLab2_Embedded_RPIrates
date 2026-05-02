@@ -14,7 +14,7 @@
 | --- | --- | --- | --- |
 | Ashutosh Awasthi |Github repo maintainer |Coding  |software and documentation |
 | Shams Kadri |Hardware design and integration |Ideation and Logic |Hardware and backend |
-| Chirag Pedeamkar |Research papers,documentaion |hardware integration | Presentation of project |
+| Chirag Pedeamkar |hardware integration | Research papers,documentaion| Presentation of project |
 | Sanisa Patrikar |Logic design and implementation |Team coordination |software and presentation |
 
 ## 1.3 Project Title
@@ -24,7 +24,7 @@
 A modular, Raspberry Pi 4B–based Smart Parking System automating vehicle entry, slot allocation, and dynamic billing for a mall environment.
 
 ## 1.5 Expanded Project Idea
-The project automates the complete vehicle lifecycle inside a mall car park. It uses an IR sensor at the entrance to detect approaching vehicles, triggering an ALPR (Automatic Licence Plate Recognition) pipeline via OpenCV and EasyOCR. The system finds the lowest-numbered free parking slot, logs the entry time to a local JSON database, displays directions on an I2C LCD, and opens a servo-controlled gate.
+The project automates the complete vehicle lifecycle inside a mall car park. It uses an IR sensor at the entrance to detect approaching vehicles, triggering an ALPR (Automatic Licence Plate Recognition) pipeline via OpenCV and Tesseract OCR. The system finds the lowest-numbered free parking slot, logs the entry time to a local JSON database, displays directions on an I2C LCD, and opens a servo-controlled gate.
 
 Occupancy is tracked continuously using debounced IR sensors at each slot. When a vehicle leaves, the system automatically detects the exit, calculates the parking duration, and generates an itemized bill using dynamic pricing (peak vs. off-peak rates), all executed locally on the Raspberry Pi.
 
@@ -36,7 +36,7 @@ Occupancy is tracked continuously using debounced IR sensors at each slot. When 
 | Source Type | Title / Link | What Inspired the Project |
 | --- | --- | --- |
 | Paper | Smart_Parking_System_using_IoT_Technology.pdf (under docs/) | IoT-based approach to automating parking slots and improving user experience. |
-| Codebase | OpenCV / EasyOCR Documentation | ALPR implementation for licence plate scanning. |
+| Codebase | OpenCV / Tesseract OCR Documentation | ALPR implementation for licence plate scanning. |
 
 ## 2.2 Original Twist
 Dynamic Pricing Engine: Instead of a flat fee or cloud-dependent billing, the system calculates costs using a local dynamic pricing model. It charges Rs. 50/hour during off-peak and Rs. 75/hour during peak hours (17:00–22:00), splitting the duration across windows automatically.
@@ -91,7 +91,7 @@ Working ALPR, slot tracking with IR sensors, gate control via servo, and basic f
 - [ ] Other
 
 ## 5.2 High-Level System Description
-A Raspberry Pi 4B acts as the central controller, coordinating an EasyOCR-based vision pipeline, hardware PWM for a servo gate, an I2C LCD, and five debounced IR sensors for entrance and capacity management. A state machine (`main.py`) manages the operational flow from Idle to Triggered, Scanning, Allocation, Monitoring, and Billing.
+A Raspberry Pi 4B acts as the central controller, coordinating a Tesseract-based vision pipeline, hardware PWM for a servo gate, an I2C LCD, and five debounced IR sensors for entrance and capacity management. A state machine (`main.py`) manages the operational flow from Idle to Triggered, Scanning, Allocation, Monitoring, and Billing.
 
 ## 5.3 Input / Output Map
 | System Part | Type | What It Does |
@@ -112,8 +112,6 @@ A Raspberry Pi 4B acts as the central controller, coordinating an EasyOCR-based 
 
 ## 6.2 Labeled Build Sketch/architecture/flow diagram/algorithm
 <img src="images/flowchart.jpeg" width="600">
-<br>
-<img src="images/rpi_pindiagram.webp" width="600">
 
 ## 6.3 Approximate Dimensions
 | Dimension | Value |
@@ -162,7 +160,7 @@ A Raspberry Pi 4B acts as the central controller, coordinating an EasyOCR-based 
 | Tool / Platform | Purpose |
 | --- | --- |
 | Python 3.9+ | Main application logic and state machine |
-| OpenCV + EasyOCR | Image capture, pre-processing, and licence plate text extraction |
+| OpenCV + Tesseract OCR | Image capture, pre-processing, and licence plate text extraction |
 | RPi.GPIO | Software PWM generation for servo control |
 | RPLCD | Managing the I2C 16x2 LCD display |
 
@@ -170,7 +168,7 @@ A Raspberry Pi 4B acts as the central controller, coordinating an EasyOCR-based 
 - Initialize GPIO pins, PWM channels, and I2C LCD interface.
 - Poll entrance IR sensor (debounced).
 - On trigger, check capacity using slot IR sensors.
-- If space is available, capture frame and run OpenCV/EasyOCR ALPR.
+- If space is available, capture frame and run OpenCV/Tesseract ALPR.
 - Find the lowest free slot (1-4).
 - Write `{plate_id, entry_time, slot}` to `database.json`.
 - Display assigned slot on LCD and open servo gate for 5 seconds.
@@ -188,14 +186,14 @@ A Raspberry Pi 4B acts as the central controller, coordinating an EasyOCR-based 
 ## 9.1 Full BOM
 | Item | Quantity | In Kit? | Need to Buy? | Estimated Cost | Material / Spec | Why This Choice? |
 | --- | ---: | --- | --- | ---: | --- | --- |
-| Raspberry Pi 4B | 1 | No | Yes | 4500 | 2GB+ RAM | Needed for running EasyOCR locally |
+| Raspberry Pi 4B | 1 | No | Yes | 4500 | 2GB+ RAM | Needed for running Tesseract OCR locally |
 | IR Sensor Module | 5 | Yes | No | 300 | Digital OUT | Reliable 3.3V operation |
 | Servo Motor SG90 | 1 | Yes | No | 150 | Standard | Simple gate actuation |
 | 16x2 I2C LCD | 1 | Yes | No | 250 | I2C Backpack | Uses only 2 GPIO pins |
 | USB Webcam | 1 | No | Yes | 800 | 720p minimum | Image capture for ALPR |
 
 ## 9.2 Material Justification
-The Raspberry Pi 4B is essential for the computational load of PyTorch/EasyOCR. IR sensors were chosen over HC-SR04 ultrasonic sensors for reliability, simplicity, and direct 3.3V compatibility without needing voltage dividers.
+The Raspberry Pi 4B is essential for the computational load of Tesseract OCR. IR sensors were chosen over HC-SR04 ultrasonic sensors for reliability, simplicity, and direct 3.3V compatibility without needing voltage dividers.
 
 ## 9.3 Items You chose
 | Item | Why Needed | Purchase Link | Latest Safe Date to Procure | Status |
@@ -214,7 +212,7 @@ The Raspberry Pi 4B is essential for the computational load of PyTorch/EasyOCR. 
 | **Total** | **6500** |
 
 ## 9.5 Budget Reflection
-The highest cost is the Raspberry Pi, which is necessary for edge AI (EasyOCR). The rest of the components are inexpensive standard electronics.
+The highest cost is the Raspberry Pi, which is necessary for edge AI (Tesseract OCR). The rest of the components are inexpensive standard electronics.
 
 ---
 
@@ -227,7 +225,7 @@ We will split the work evenly between hardware assembly and software logic/integ
 | Task ID | Task | Owner | Estimated Hours | Deadline | Dependency | Status |
 | --- | --- | --- | ---: | --- | --- | --- |
 | 1 | Hardware Wiring & LCD setup | Chirag | 2 | | | Done |
-| 2 | OpenCV & EasyOCR Pipeline | Ashutosh | 4 | | | Done |
+| 2 | OpenCV & Tesseract Pipeline | Ashutosh | 4 | | | Done |
 | 3 | State Machine & Main Logic | Shams | 3 | | Task 2 | Done |
 | 4 | Dynamic Billing Module | Sanisa | 2 | | | Done |
 | 5 | Integration & Testing | All | 3 | | Tasks 1,3,4 | Done |
@@ -295,7 +293,7 @@ We will split the work evenly between hardware assembly and software logic/integ
 ## 13.1 Risk Register
 | Risk | Type | Likelihood | Impact | Mitigation Plan | Owner |
 | --- | --- | --- | --- | --- | --- |
-| EasyOCR slow processing | Technical | High | Medium | Use OpenCV preprocessing to enhance image quality and reduce OCR region | Ashutosh |
+| Tesseract slow processing | Technical | High | Medium | Use OpenCV preprocessing to enhance image quality and reduce OCR region | Ashutosh |
 | Pi Brownout from Servo | Hardware | Medium | High | Use separate 5V supply if issues arise during testing | Chirag |
 | IR Sensor Noise | Hardware | High | Medium | Implemented software debounce (3 seconds) in `hardware.py` | Shams |
 
@@ -338,7 +336,6 @@ Lighting conditions in the final display area might affect camera capture and OC
 
 # 16 Build Photos
 <img src="images/setup.jpg" width="600">
-<img src="images/connections.jpg" width="600">
 <img src="images/final_connection.jpg" width="600">
 
 ---
@@ -354,11 +351,11 @@ A fully automated, edge-AI powered Smart Parking System for a mall. The system i
 - The servo gate actuates reliably to control vehicle entry.
 
 ## 17.3 What Still Needs Improvement
-- EasyOCR processing takes a few seconds on the Pi CPU, which causes a slight wait at the entrance.
-- Performance could be improved by using a Coral Edge TPU or lighter OCR model.
+- While Tesseract is faster than EasyOCR, OCR processing still takes a moment on the Pi CPU, which causes a slight wait at the entrance.
+- Performance could be further improved by using a Coral Edge TPU or a lighter OCR model.
 
 ## 17.4 What Changed From the Original Plan
-We completely dropped HC-SR04 ultrasonic sensors in favor of IR proximity sensors. We also decided to keep all billing logic local instead of sending it to a cloud server to ensure zero latency and offline capability. Additionally, we switched from `pigpio` to `RPi.GPIO` for servo control because the `pigpiod` daemon was causing issues.
+We completely dropped HC-SR04 ultrasonic sensors in favor of IR proximity sensors. We also decided to keep all billing logic local instead of sending it to a cloud server to ensure zero latency and offline capability. Additionally, we switched from `pigpio` to `RPi.GPIO` for servo control because the `pigpiod` daemon was causing issues. Finally, we swapped out EasyOCR for Tesseract OCR because EasyOCR was taking too much time to process frames on the Pi, leading to unacceptable entry delays.
 
 ---
 
@@ -396,6 +393,4 @@ We would add a web dashboard to visually represent the `database.json` live stat
 - [x] Testing log is updated
 - [x] Playtesting notes are included
 - [x] Build photos are included
-- [x] Final reflection is written
-Build photos are included
 - [x] Final reflection is written
